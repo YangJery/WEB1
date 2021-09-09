@@ -5,8 +5,28 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-mode="day">
     <h1><a href="index.html">WEB</a></h1>
+    <input type="button" value="night" onclick="
+        document.querySelector('body').style.backgroundColor = 'black';
+        document.querySelector('body').style.color = 'white';
+    ">
+    <input type="button" value="day" onclick="
+        document.querySelector('body').style.backgroundColor = 'white';
+        document.querySelector('body').style.color = 'black';
+    ">
+    <input id = "night_day" type="button" value="night" onclick="
+        var target = document.querySelector('body');
+        if (this.value === 'night'){
+        target.style.backgroundColor = 'black';
+        target.style.color = 'white';
+        this.value = 'day';
+        } else {
+        target.style.backgroundColor = 'white';
+        target.style.color = 'black';    
+        this.value = 'night';
+        }
+    ">
     <div id="grid">
         <ol>
             <li><a href="1.html">HTML</a></li>
@@ -15,7 +35,7 @@
         </ol>
         <div id="article">
             <h2>WEB이란 무엇인가?</h2>
-            <p>
+            <p>        
             The World Wide Web (WWW), commonly known as the Web, is an information system where documents and other web resources are identified by Uniform Resource Locators (URLs, such as https://example.com/), which may be interlinked by hyperlinks, and are accessible over the Internet.
             [1][2] The resources of the Web are transferred via the Hypertext Transfer Protocol (HTTP), may be accessed by users by a software application called a web browser, and are published by a software application called a web server.
             The World Wide Web is not synonymous with the Internet, which pre-dated the Web in some form by over two decades and upon which technologies the Web is built.
