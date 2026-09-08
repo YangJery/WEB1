@@ -17,7 +17,11 @@ function getToken() {
     if (!raw) return '';
 
     const saved = JSON.parse(raw);
-    if (!saved || !saved.token || !saved.expiresAt) return '';
+    if (!saved || !saved.token || !saved.expiresAt) {
+      // 기한이 없던 예전 형식입니다. 쓸 수 없으니 남겨두지 않습니다.
+      clearToken();
+      return '';
+    }
 
     if (Date.now() > saved.expiresAt) {
       clearToken();
@@ -25,7 +29,8 @@ function getToken() {
     }
     return saved.token;
   } catch (e) {
-    // 저장이 막혀 있거나, 기한이 없던 예전 형식으로 저장된 경우입니다.
+    // 형식이 깨졌거나 저장 자체가 막힌 경우입니다.
+    clearToken();
     return '';
   }
 }
