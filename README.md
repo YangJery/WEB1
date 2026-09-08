@@ -15,6 +15,7 @@ index.html       동작 목록 (홈)
 movement.html    동작 상세 페이지
 css/style.css    전체 스타일
 images/          동작 사진
+animations/      동작 애니메이션
 js/data.js       동작 데이터  ← 내용을 추가할 때 여기만 고치면 됩니다
 js/common.js     목록·상세가 함께 쓰는 함수
 js/list.js       목록 화면 그리기
@@ -38,6 +39,7 @@ js/detail.js     상세 화면 그리기
     { src: 'images/teaser-1.jpg', caption: '시작 자세' },
     { src: 'images/teaser-2.jpg', caption: '마무리 자세' }
   ],
+  animation: 'animations/teaser.mp4',
   youtube: 'https://youtu.be/dQw4w9WgXcQ',
   targets: ['복직근', '고관절 굴곡근'],
   breathing: '호흡 설명',
@@ -65,6 +67,25 @@ images: [
 첫 번째 사진이 목록 화면의 카드 사진으로도 쓰입니다.
 사진 크기와 이름 규칙은 `images/README.md` 를 참고하세요.
 
+## 애니메이션 넣기
+
+동작을 촬영해 짧은 애니메이션으로 만든 파일은 `animations/` 폴더에 넣고 연결합니다.
+
+```js
+animation: 'animations/hundred.mp4'
+```
+
+`mp4` 와 `webm` 은 동영상으로, `gif` 와 `webp` 는 이미지로 자동 구분해서 넣습니다.
+어느 쪽이든 소리 없이 자동 반복되어 보는 느낌은 같습니다.
+
+**MP4를 권장합니다.** 같은 화질에서 GIF보다 10배 이상 작아 사이트가 훨씬 빠릅니다.
+파일 하나 1MB 이하를 목표로 하세요. 촬영본을 줄이는 ffmpeg 명령과 형식별 용량
+비교는 `animations/README.md` 에 정리해 두었습니다.
+
+사진이 없는 동작이라면 `gif` / `webp` 애니메이션이 목록 화면의 카드 사진으로도
+쓰입니다. (`mp4` 는 카드에 쓰이지 않으니, 카드에 그림을 넣고 싶다면 `images` 에
+사진을 한 장 넣어주세요.)
+
 ## 영상 넣기
 
 유튜브 주소를 `youtube` 값에 그대로 붙여넣으면 됩니다. 아래 형태를 모두 인식합니다.
@@ -76,7 +97,8 @@ youtube: 'https://www.youtube.com/shorts/dQw4w9WgXcQ'
 youtube: 'dQw4w9WgXcQ'
 ```
 
-영상이 있는 동작은 목록 화면의 카드에 `▶ 영상` 표시가 붙습니다.
+애니메이션이 있는 동작에는 `◉ 애니메이션`, 영상이 있는 동작에는 `▶ 영상` 표시가
+목록 화면의 카드에 붙습니다.
 값을 비워두면 상세 페이지에 영상 칸이 아예 나타나지 않습니다.
 
 영상은 유튜브에 올린 뒤 링크만 연결하는 방식이라 저장소 용량을 쓰지 않습니다.

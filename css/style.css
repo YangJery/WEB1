@@ -140,15 +140,23 @@ body {
     letter-spacing: 0.02em;
 }
 
-.video-badge {
+.badges {
     position: absolute;
     right: 10px;
     bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.media-badge {
     padding: 3px 10px;
     border-radius: 999px;
     background: rgba(28, 26, 24, 0.72);
     color: #fff;
     font-size: 12px;
+    white-space: nowrap;
 }
 
 .card h3 {
@@ -299,6 +307,23 @@ body {
 
 .cautions li::marker {
     color: #b06a6a;
+}
+
+/* 상세 페이지 동작 애니메이션 */
+.animation-frame {
+    max-width: 560px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #14130f;
+    line-height: 0;
+}
+
+.animation-frame video,
+.animation-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* 상세 페이지 사진 */

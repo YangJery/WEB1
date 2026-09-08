@@ -26,6 +26,45 @@ function createBlock(title, items, className) {
   return section;
 }
 
+// 동작 애니메이션. mp4 / webm 은 동영상으로, gif / webp 는 이미지로 넣습니다.
+// 소리 없이 자동 반복되지만, 방문자가 '움직임 줄이기'를 켜 두었다면
+// 자동 재생하지 않고 재생 버튼을 눌러 보도록 둡니다.
+function createAnimation(movement) {
+  if (!movement.animation) return null;
+
+  const section = document.createElement('section');
+  section.className = 'block animation';
+
+  const heading = document.createElement('h2');
+  heading.textContent = '동작 애니메이션';
+
+  const frame = document.createElement('div');
+  frame.className = 'animation-frame';
+
+  if (isVideoFile(movement.animation)) {
+    const video = document.createElement('video');
+    video.src = movement.animation;
+    video.loop = true;
+    video.muted = true;
+    // 자동 재생은 무음일 때만 허용되므로 속성으로도 남겨둡니다.
+    video.setAttribute('muted', '');
+    video.playsInline = true;
+    video.controls = true;
+    video.autoplay = !prefersReducedMotion();
+    video.setAttribute('aria-label', movement.name + ' 동작 애니메이션');
+    frame.appendChild(video);
+  } else {
+    const img = document.createElement('img');
+    img.src = movement.animation;
+    img.alt = movement.name + ' 동작 애니메이션';
+    img.loading = 'lazy';
+    frame.appendChild(img);
+  }
+
+  section.append(heading, frame);
+  return section;
+}
+
 // 사진 여러 장을 나란히 보여줍니다. 사진이 없으면 아무것도 만들지 않습니다.
 function createGallery(movement) {
   if (!movement.images || movement.images.length === 0) return null;
@@ -157,6 +196,7 @@ function renderDetail() {
 
   const blocks = [
     createHeader(movement),
+    createAnimation(movement),
     createGallery(movement),
     createVideo(movement),
     createBlock('주요 사용 근육', movement.targets, 'targets'),
