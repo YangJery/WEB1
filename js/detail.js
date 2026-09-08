@@ -89,6 +89,8 @@ function createVideo(movement) {
 }
 
 function renderNotFound(container) {
+  document.title = '동작을 찾을 수 없습니다 - 필라테스 동작 사전';
+
   const heading = document.createElement('h1');
   heading.textContent = '동작을 찾을 수 없습니다';
 

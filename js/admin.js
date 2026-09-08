@@ -155,6 +155,9 @@ function photoRow(label, caption, onCaption, onRemove, preview) {
   return row;
 }
 
+// 폼 안 요소의 id 는 폼의 내장 멤버 이름과 겹치면 안 됩니다.
+// 겹치면 그 id 를 가진 요소가 메서드를 가려버려 form.reset() 이 함수가 아니게 됩니다.
+// 그래서 '새로 쓰기' 버튼의 id 는 reset 이 아니라 new-movement 입니다.
 function clearForm() {
   editingId = null;
   pendingPhotos = [];
@@ -339,7 +342,13 @@ async function publish(event) {
 
 async function remove() {
   if (!editingId) return;
+
   const movement = movements.find(function (m) { return m.id === editingId; });
+  if (!movement) {
+    clearForm();
+    return setStatus($('status'), '이미 지워진 동작입니다.', 'warn');
+  }
+
   if (!confirm('"' + movement.name + '" 동작을 목록에서 지웁니다. 계속할까요?\n\n(올린 사진 파일은 남아 있습니다.)')) return;
 
   const status = $('status');
@@ -373,7 +382,10 @@ async function start() {
     const token = $('token-input').value.trim();
     if (!token) return setStatus(status, '토큰을 붙여넣어 주세요.', 'error');
 
-    saveToken(token);
+    if (!saveToken(token)) {
+      return setStatus(status, '이 브라우저가 저장을 막고 있어 토큰을 기억할 수 없습니다. ' +
+                       '사생활 보호 모드라면 일반 창에서 열어주세요.', 'error');
+    }
     setStatus(status, '확인 중…');
     try {
       const name = await checkAccess();
@@ -395,7 +407,7 @@ async function start() {
     else clearForm();
   });
 
-  $('reset').addEventListener('click', clearForm);
+  $('new-movement').addEventListener('click', clearForm);
   $('delete').addEventListener('click', remove);
   $('photo-input').addEventListener('change', handlePhotoPick);
   $('movement-form').addEventListener('submit', publish);
