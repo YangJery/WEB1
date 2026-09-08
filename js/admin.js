@@ -9,6 +9,20 @@ let keptPhotos = [];       // 수정 중인 동작이 이미 가지고 있던 �
 
 const $ = function (id) { return document.getElementById(id); };
 
+// 올릴 수 있는 사진 형식.
+// svg 는 그림처럼 보이지만 안에 스크립트를 담을 수 있고, 사이트와 같은 주소에서
+// 실행되므로 저장된 토큰을 읽어갈 수 있습니다. 그래서 받지 않습니다.
+const ALLOWED_PHOTO_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+// 파일 이름에서 허용된 확장자를 뽑습니다. 허용되지 않으면 null 입니다.
+function photoExtension(originalName) {
+  const dot = originalName.lastIndexOf('.');
+  if (dot < 0) return null;
+
+  const ext = originalName.slice(dot + 1).toLowerCase();
+  return ALLOWED_PHOTO_EXTENSIONS.indexOf(ext) === -1 ? null : ext;
+}
+
 function setStatus(el, message, kind) {
   el.textContent = message;
   el.className = 'status' + (kind ? ' ' + kind : '');
@@ -192,10 +206,9 @@ function readFileAsDataUrl(file) {
   });
 }
 
-// 파일 이름을 안전하게 다듬고 겹치지 않게 번호를 붙입니다.
-function photoFilename(movementId, originalName) {
-  const dot = originalName.lastIndexOf('.');
-  const ext = (dot >= 0 ? originalName.slice(dot + 1) : 'jpg').toLowerCase();
+// 겹치지 않게 번호를 붙여 파일 이름을 만듭니다.
+// movementId 와 ext 는 이미 검사를 거친 값만 들어옵니다.
+function photoFilename(movementId, ext) {
   const used = keptPhotos.map(function (p) { return p.src; })
     .concat(pendingPhotos.map(function (p) { return 'images/' + p.filename; }));
 
@@ -209,17 +222,24 @@ function photoFilename(movementId, originalName) {
 }
 
 async function handlePhotoPick(event) {
-  const id = $('f-id').value.trim() || slugify($('f-nameEn').value) || 'movement';
+  // 파일 이름에 쓰이므로, 아직 검사를 거치지 않은 id 를 여기서 다듬어 둡니다.
+  const id = slugify($('f-id').value || $('f-nameEn').value) || 'movement';
   const files = Array.from(event.target.files || []);
 
   for (const file of files) {
+    const ext = photoExtension(file.name);
+    if (!ext) {
+      setStatus($('status'), file.name + ' 은 올릴 수 없는 형식입니다. ' +
+                'jpg, png, webp, gif 만 올릴 수 있습니다.', 'warn');
+      continue;
+    }
     if (file.size > 5 * 1024 * 1024) {
       setStatus($('status'), file.name + ' 은 5MB가 넘어 건너뜁니다. 크기를 줄여서 올려주세요.', 'warn');
       continue;
     }
     const dataUrl = await readFileAsDataUrl(file);
     pendingPhotos.push({
-      filename: photoFilename(id, file.name),
+      filename: photoFilename(id, ext),
       dataUrl: dataUrl,
       base64: dataUrl.split(',')[1],
       caption: ''
