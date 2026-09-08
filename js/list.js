@@ -1,23 +1,14 @@
 // 홈 화면: 동작을 카테고리별로 묶어 카드 목록으로 그려줍니다.
 
-// 카드 위쪽의 사진 영역.
-// 사진이 없으면 움직이는 이미지 형식(gif / webp)의 애니메이션을 대신 씁니다.
-// 둘 다 없으면 빈 자리를 채웁니다.
-function coverSource(movement) {
-  const photo = movement.images && movement.images[0];
-  if (photo) return photo.src;
-  if (movement.animation && !isVideoFile(movement.animation)) return movement.animation;
-  return null;
-}
-
+// 카드 위쪽의 사진 영역. 사진이 없으면 빈 자리를 대신 채웁니다.
 function createThumb(movement) {
   const thumb = document.createElement('div');
   thumb.className = 'thumb';
 
-  const cover = coverSource(movement);
+  const cover = movement.images && movement.images[0];
   if (cover) {
     const img = document.createElement('img');
-    img.src = cover;
+    img.src = cover.src;
     img.alt = movement.name + ' 자세';
     img.loading = 'lazy';
     thumb.appendChild(img);
@@ -26,24 +17,13 @@ function createThumb(movement) {
     thumb.textContent = movement.nameEn;
   }
 
-  const badges = document.createElement('div');
-  badges.className = 'badges';
-
-  if (movement.animation) {
-    const badge = document.createElement('span');
-    badge.className = 'media-badge';
-    badge.textContent = '◉ 애니메이션';
-    badges.appendChild(badge);
-  }
-
   if (youtubeId(movement.youtube)) {
     const badge = document.createElement('span');
-    badge.className = 'media-badge';
+    badge.className = 'video-badge';
     badge.textContent = '▶ 영상';
-    badges.appendChild(badge);
+    thumb.appendChild(badge);
   }
 
-  if (badges.children.length > 0) thumb.appendChild(badges);
   return thumb;
 }
 

@@ -33,14 +33,3 @@ function youtubeId(value) {
   }
   return null;
 }
-
-// 애니메이션 파일이 동영상인지 움직이는 이미지인지 구분합니다.
-// mp4 / webm 은 <video> 로, gif / webp / apng 는 <img> 로 넣어야 합니다.
-function isVideoFile(path) {
-  return /\.(mp4|webm)$/i.test(path || '');
-}
-
-// 방문자가 운영체제에서 '움직임 줄이기'를 켜 두었는지 확인합니다.
-function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
