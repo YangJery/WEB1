@@ -25,17 +25,37 @@
                 토큰은 이 브라우저에만 저장되고 다른 곳으로 전송되지 않습니다.
             </p>
 
-            <details class="guide">
-                <summary>토큰 만드는 방법</summary>
+            <details class="guide" open>
+                <summary>토큰 만드는 방법 (처음이거나 기한이 지났을 때)</summary>
+
+                <p class="guide-lead">
+                    아래 주소를 누르면 만드는 화면이 바로 열립니다.
+                    메뉴에서 찾지 않아도 됩니다.
+                </p>
+                <p>
+                    <a class="guide-link" href="https://github.com/settings/personal-access-tokens/new"
+                       target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>
+                </p>
+
                 <ol>
-                    <li>GitHub → 오른쪽 위 프로필 → <b>Settings</b></li>
-                    <li>맨 아래 <b>Developer settings</b></li>
-                    <li><b>Personal access tokens → Fine-grained tokens</b> → <b>Generate new token</b></li>
-                    <li>Repository access 에서 <b>Only select repositories</b> → <b>WEB1</b> 선택</li>
-                    <li>Permissions → Repository permissions → <b>Contents</b> 를 <b>Read and write</b> 로</li>
-                    <li>Expiration(기한)은 90일 정도로 두면 됩니다. 만료되면 새로 발급받아 다시 넣으세요.</li>
-                    <li>생성 후 나오는 <code>github_pat_...</code> 문자열을 아래에 붙여넣습니다.</li>
+                    <li><b>Token name</b> — 아무 이름이나. 예: <code>pilates-admin</code></li>
+                    <li><b>Expiration</b> — 90일 정도로 둡니다.</li>
+                    <li><b>Repository access</b> → <b>Only select repositories</b> → <b>WEB1</b> 선택</li>
+                    <li>
+                        <b>Permissions</b> → <b>Repositories</b> 옆 <b>+</b> 버튼 →
+                        <code>Contents</code> 검색 → <b>Read and write</b> 로 지정
+                        <br><small>Metadata 가 Read-only 로 같이 붙습니다. 필수 항목이니 그대로 두세요.</small>
+                    </li>
+                    <li>초록색 <b>Generate token</b> 누르기</li>
+                    <li>
+                        나오는 <code>github_pat_...</code> 문자열을 복사해 아래에 붙여넣습니다.
+                        <br><small>그 화면을 벗어나면 다시 볼 수 없습니다. 잃어버리면 같은 방법으로 새로 만들면 됩니다.</small>
+                    </li>
                 </ol>
+
+                <p class="guide-note">
+                    토큰은 비밀번호와 같습니다. 화면을 남에게 보여주거나 저장소 안의 파일에 적지 마세요.
+                </p>
             </details>
 
             <label class="field">
