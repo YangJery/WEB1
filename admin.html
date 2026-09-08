@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>동작 관리 - 필라테스 동작 사전</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin">
+    <header class="site-header">
+        <div class="wrap">
+            <a class="logo" href="index.html">필라테스 동작 사전</a>
+            <p class="tagline">동작 관리</p>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <!-- 1단계: 토큰 등록 -->
+        <section id="login" class="panel" hidden>
+            <h1>시작하기</h1>
+            <p class="help">
+                글을 올리려면 GitHub 토큰이 한 번 필요합니다.
+                토큰은 이 브라우저에만 저장되고 다른 곳으로 전송되지 않습니다.
+            </p>
+
+            <details class="guide">
+                <summary>토큰 만드는 방법</summary>
+                <ol>
+                    <li>GitHub → 오른쪽 위 프로필 → <b>Settings</b></li>
+                    <li>맨 아래 <b>Developer settings</b></li>
+                    <li><b>Personal access tokens → Fine-grained tokens</b> → <b>Generate new token</b></li>
+                    <li>Repository access 에서 <b>Only select repositories</b> → <b>WEB1</b> 선택</li>
+                    <li>Permissions → Repository permissions → <b>Contents</b> 를 <b>Read and write</b> 로</li>
+                    <li>Expiration(기한)은 90일 정도로 두면 됩니다. 만료되면 새로 발급받아 다시 넣으세요.</li>
+                    <li>생성 후 나오는 <code>github_pat_...</code> 문자열을 아래에 붙여넣습니다.</li>
+                </ol>
+            </details>
+
+            <label class="field">
+                <span>토큰</span>
+                <input type="password" id="token-input" placeholder="github_pat_..." autocomplete="off">
+            </label>
+            <button id="token-save" class="primary">저장하고 확인</button>
+            <p id="login-status" class="status" role="status"></p>
+        </section>
+
+        <!-- 2단계: 관리 화면 -->
+        <section id="workspace" hidden>
+            <div class="workspace-head">
+                <h1 id="form-title">새 동작 올리기</h1>
+                <div class="workspace-actions">
+                    <select id="movement-picker" aria-label="수정할 동작 선택">
+                        <option value="">+ 새 동작 만들기</option>
+                    </select>
+                    <button id="logout" class="ghost">토큰 지우기</button>
+                </div>
+            </div>
+
+            <form id="movement-form" class="panel">
+                <div class="row">
+                    <label class="field">
+                        <span>동작 이름 <b>*</b></span>
+                        <input type="text" id="f-name" required placeholder="티저">
+                    </label>
+                    <label class="field">
+                        <span>영문 이름 <b>*</b></span>
+                        <input type="text" id="f-nameEn" required placeholder="Teaser">
+                    </label>
+                </div>
+
+                <div class="row">
+                    <label class="field">
+                        <span>분류</span>
+                        <select id="f-category"></select>
+                    </label>
+                    <label class="field">
+                        <span>난이도</span>
+                        <select id="f-level">
+                            <option>초급</option>
+                            <option>중급</option>
+                            <option>고급</option>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>주소용 id <b>*</b></span>
+                        <input type="text" id="f-id" required placeholder="teaser">
+                    </label>
+                </div>
+
+                <label class="field">
+                    <span>한 줄 소개</span>
+                    <input type="text" id="f-summary" placeholder="목록에 보이는 짧은 설명">
+                </label>
+
+                <label class="field">
+                    <span>주요 사용 근육</span>
+                    <input type="text" id="f-targets" placeholder="복직근, 고관절 굴곡근">
+                    <small>쉼표로 구분합니다.</small>
+                </label>
+
+                <label class="field">
+                    <span>호흡</span>
+                    <textarea id="f-breathing" rows="2"></textarea>
+                </label>
+
+                <label class="field">
+                    <span>진행 순서</span>
+                    <textarea id="f-steps" rows="5"></textarea>
+                    <small>한 줄에 한 단계씩 적습니다.</small>
+                </label>
+
+                <div class="row">
+                    <label class="field">
+                        <span>주의할 점</span>
+                        <textarea id="f-cautions" rows="4"></textarea>
+                        <small>한 줄에 하나씩.</small>
+                    </label>
+                    <label class="field">
+                        <span>도움이 되는 팁</span>
+                        <textarea id="f-tips" rows="4"></textarea>
+                        <small>한 줄에 하나씩.</small>
+                    </label>
+                </div>
+
+                <label class="field">
+                    <span>유튜브 주소</span>
+                    <input type="text" id="f-youtube" placeholder="https://youtu.be/...">
+                    <small>주소를 그대로 붙여넣으세요. 쇼츠 주소도 됩니다.</small>
+                </label>
+
+                <fieldset class="field photos">
+                    <legend>사진</legend>
+                    <div id="photo-list" class="photo-list"></div>
+                    <input type="file" id="photo-input" accept="image/*" multiple>
+                    <small>발행할 때 함께 올라갑니다. 첫 번째 사진이 목록의 카드 사진이 됩니다.</small>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button type="submit" class="primary" id="publish">발행하기</button>
+                    <button type="button" class="ghost" id="reset">새로 쓰기</button>
+                    <button type="button" class="danger" id="delete" hidden>이 동작 삭제</button>
+                </div>
+
+                <p id="status" class="status" role="status"></p>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <p class="notice">
+                이 페이지는 관리용입니다. 토큰이 없으면 아무 것도 바꿀 수 없으니
+                주소가 알려져도 내용이 변경되지 않습니다.
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/github.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
