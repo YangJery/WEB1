@@ -7,17 +7,35 @@ const BRANCH = 'main';
 const DATA_PATH = 'js/data.js';
 const TOKEN_KEY = 'pilates-admin-token';
 
+// 토큰을 기한 없이 두면 쓰지 않는 동안에도 브라우저에 계속 남습니다.
+// 발급받는 토큰 자체의 기한이 보통 한 달이라, 보관 기한도 거기에 맞춥니다.
+const TOKEN_TTL_DAYS = 30;
+
 function getToken() {
   try {
-    return localStorage.getItem(TOKEN_KEY) || '';
+    const raw = localStorage.getItem(TOKEN_KEY);
+    if (!raw) return '';
+
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.token || !saved.expiresAt) return '';
+
+    if (Date.now() > saved.expiresAt) {
+      clearToken();
+      return '';
+    }
+    return saved.token;
   } catch (e) {
+    // 저장이 막혀 있거나, 기한이 없던 예전 형식으로 저장된 경우입니다.
     return '';
   }
 }
 
 function saveToken(token) {
   try {
-    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(TOKEN_KEY, JSON.stringify({
+      token: token,
+      expiresAt: Date.now() + TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000
+    }));
     return true;
   } catch (e) {
     return false;
