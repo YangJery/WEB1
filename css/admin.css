@@ -50,6 +50,41 @@
     margin-bottom: 6px;
 }
 
+.guide-lead {
+    margin: 12px 0 8px;
+    color: var(--muted);
+}
+
+.guide-link {
+    display: inline-block;
+    padding: 8px 14px;
+    background: var(--accent-soft);
+    border-radius: 8px;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.guide-link:hover {
+    background: #e3ebe1;
+}
+
+.guide small {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.guide-note {
+    margin: 14px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    color: #8a5a1f;
+    font-size: 13px;
+}
+
 .guide code {
     padding: 1px 5px;
     background: var(--accent-soft);

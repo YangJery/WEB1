@@ -37,11 +37,22 @@ js/github.js     저장소에 파일을 읽고 쓰는 부분
 ### 처음 한 번, 토큰 등록
 
 관리 화면이 저장소에 파일을 쓰려면 GitHub 토큰이 필요합니다.
-`admin.html` 안의 안내를 펼치면 만드는 순서가 적혀 있습니다. 요약하면:
+방법은 `admin.html` 첫 화면에 그대로 적혀 있으니 외우지 않아도 됩니다.
 
-GitHub → Settings → Developer settings → Personal access tokens →
-**Fine-grained tokens** → Generate new token → 저장소는 **WEB1 만** 선택 →
-권한은 **Contents: Read and write** → 만들어진 `github_pat_...` 를 붙여넣기.
+만드는 화면으로 바로 가는 주소:
+**https://github.com/settings/personal-access-tokens/new**
+
+| 항목 | 값 |
+|---|---|
+| Token name | 아무 이름 (예: `pilates-admin`) |
+| Expiration | 90 days |
+| Repository access | Only select repositories → **WEB1** |
+| Permissions → Repositories → **Contents** | **Read and write** |
+
+`Contents` 를 넣으면 `Metadata` 가 Read-only 로 자동으로 따라붙습니다. 필수 항목이라
+지울 수 없고, 그대로 두면 됩니다. 만들어진 `github_pat_...` 를 관리 화면에 붙여넣으세요.
+그 문자열은 발급 화면을 벗어나면 다시 볼 수 없지만, 잃어버려도 같은 방법으로
+새로 만들면 되니 따로 보관하지 않아도 괜찮습니다.
 
 토큰은 **이 브라우저에만** 저장되고 다른 곳으로 전송되지 않습니다.
 `admin.html` 주소는 누구나 열 수 있지만 토큰이 없으면 아무 것도 바꿀 수 없습니다.
