@@ -4,31 +4,54 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>필라테스 동작 사전</title>
-    <meta name="description" content="필라테스 매트 동작의 순서, 호흡, 주의점을 정리한 자료실입니다.">
+    <meta name="description" content="필라테스 매트 동작의 순서와 호흡, 주의점, 그리고 어느 근육이 일하는지를 정리했습니다.">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="wrap">
-            <a class="logo" href="index.html">필라테스 동작 사전</a>
-            <p class="tagline">매트 동작의 순서와 호흡, 주의점을 한자리에</p>
+    <header class="topbar">
+        <div class="shell">
+            <a class="brand" href="index.html">필라테스 동작 사전</a>
+            <nav><a href="#movements">동작 보기</a></nav>
         </div>
     </header>
 
-    <main class="wrap">
-        <section class="intro">
-            <h1>동작 목록</h1>
-            <p>
-                각 동작의 진행 순서와 호흡법, 흔히 하는 실수를 정리했습니다.
-                동작 이름을 눌러 자세한 설명을 확인하세요.
-            </p>
+    <main>
+        <section class="hero shell">
+            <div class="hero-copy">
+                <h1>어느 근육이<br>일하는지<em>한눈에</em></h1>
+                <p>필라테스 매트 동작의 진행 순서와 호흡,
+                   그리고 몸의 어느 부위가 쓰이는지를 정리했습니다.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-solid" href="#movements">동작 보기</a>
+                    <a class="btn btn-ghost" href="movement.html?id=hundred">헌드레드부터</a>
+                </div>
+            </div>
+
+            <div class="hero-stage">
+                <div class="hero-figure" id="hero-figure"></div>
+                <div class="hero-caption" id="hero-caption"></div>
+            </div>
+
+            <p class="scroll-hint">아래로 스크롤</p>
         </section>
 
-        <div id="movement-list"></div>
+        <section class="band" id="movements">
+            <div class="shell">
+                <div class="section-head reveal">
+                    <p class="eyebrow">동작 목록</p>
+                    <h2>몸의 부위별로 나눠 담았습니다</h2>
+                    <p class="lede">
+                        각 동작마다 진행 순서와 호흡, 흔히 하는 실수를 적었습니다.
+                        이름을 누르면 자세한 설명으로 갑니다.
+                    </p>
+                </div>
+                <div id="movement-list"></div>
+            </div>
+        </section>
     </main>
 
     <footer class="site-footer">
-        <div class="wrap">
+        <div class="shell">
             <p class="notice">
                 이 사이트의 내용은 일반적인 참고 자료입니다. 부상이나 질환이 있다면
                 전문 강사 또는 의료진과 상담하세요. 동작 중 통증이 느껴지면 즉시 중단해야 합니다.
@@ -38,6 +61,9 @@
 
     <script src="js/data.js"></script>
     <script src="js/common.js"></script>
+    <script src="js/bodymap.js"></script>
+    <script src="js/hero.js"></script>
     <script src="js/list.js"></script>
+    <script src="js/reveal.js"></script>
 </body>
 </html>

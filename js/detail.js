@@ -2,15 +2,27 @@
 
 function findMovement() {
   const id = new URLSearchParams(location.search).get('id');
-  return MOVEMENTS.find(function (m) {
-    return m.id === id;
-  });
+  return MOVEMENTS.find(function (m) { return m.id === id; });
 }
 
-// 제목과 항목 목록으로 이루어진 블록을 만듭니다.
+// 한 구역을 만듭니다. dark 를 주면 어두운 배경이 됩니다.
+function createBand(children, options) {
+  const opts = options || {};
+  const band = document.createElement('section');
+  band.className = 'band' + (opts.dark ? ' band-dark' : '');
+
+  const shell = document.createElement('div');
+  shell.className = 'shell' + (opts.narrow ? ' shell-narrow' : '');
+  children.filter(Boolean).forEach(function (child) { shell.appendChild(child); });
+
+  band.appendChild(shell);
+  return band;
+}
+
+// 제목과 항목 목록으로 이루어진 블록.
 function createBlock(title, items, className) {
   const section = document.createElement('section');
-  section.className = 'block ' + (className || '');
+  section.className = 'block reveal ' + (className || '');
 
   const heading = document.createElement('h2');
   heading.textContent = title;
@@ -26,12 +38,49 @@ function createBlock(title, items, className) {
   return section;
 }
 
-// 사진 여러 장을 나란히 보여줍니다. 사진이 없으면 아무것도 만들지 않습니다.
+// 주요 사용 근육. 도식을 먼저 보여주고 정확한 이름을 아래에 둡니다.
+function createTargets(movement) {
+  const section = document.createElement('section');
+  section.className = 'block targets reveal';
+
+  const heading = document.createElement('h2');
+  heading.textContent = '주요 사용 근육';
+  section.appendChild(heading);
+
+  const map = createBodyMap(movement);
+  if (map) section.appendChild(map);
+
+  const list = document.createElement('ul');
+  (movement.targets || []).forEach(function (name) {
+    const li = document.createElement('li');
+    li.textContent = name;
+    list.appendChild(li);
+  });
+  section.appendChild(list);
+
+  return section;
+}
+
+function createBreathing(movement) {
+  const section = document.createElement('section');
+  section.className = 'block breathing reveal';
+
+  const heading = document.createElement('h2');
+  heading.textContent = '호흡';
+
+  const text = document.createElement('p');
+  text.textContent = movement.breathing;
+
+  section.append(heading, text);
+  return section;
+}
+
+// 사진 여러 장을 나란히 보여줍니다. 사진이 없으면 만들지 않습니다.
 function createGallery(movement) {
   if (!movement.images || movement.images.length === 0) return null;
 
   const section = document.createElement('section');
-  section.className = 'block gallery';
+  section.className = 'block gallery reveal';
 
   const heading = document.createElement('h2');
   heading.textContent = '사진';
@@ -53,7 +102,6 @@ function createGallery(movement) {
       caption.textContent = image.caption;
       figure.appendChild(caption);
     }
-
     grid.appendChild(figure);
   });
 
@@ -61,13 +109,13 @@ function createGallery(movement) {
   return section;
 }
 
-// 유튜브 영상을 끼워 넣습니다. 주소가 없거나 형식이 맞지 않으면 만들지 않습니다.
+// 유튜브 영상. 주소가 없거나 형식이 맞지 않으면 만들지 않습니다.
 function createVideo(movement) {
   const id = youtubeId(movement.youtube);
   if (!id) return null;
 
   const section = document.createElement('section');
-  section.className = 'block video';
+  section.className = 'block video reveal';
 
   const heading = document.createElement('h2');
   heading.textContent = '영상';
@@ -88,21 +136,14 @@ function createVideo(movement) {
   return section;
 }
 
-function renderNotFound(container) {
-  document.title = '동작을 찾을 수 없습니다 - 필라테스 동작 사전';
+function createHero(movement) {
+  const section = document.createElement('section');
+  section.className = 'detail-hero shell';
 
-  const heading = document.createElement('h1');
-  heading.textContent = '동작을 찾을 수 없습니다';
-
-  const message = document.createElement('p');
-  message.textContent = '주소가 잘못되었거나 삭제된 동작입니다. 목록에서 다시 선택해 주세요.';
-
-  container.append(heading, message);
-}
-
-function createHeader(movement) {
-  const header = document.createElement('header');
-  header.className = 'detail-header';
+  const back = document.createElement('a');
+  back.className = 'back-link';
+  back.href = 'index.html';
+  back.textContent = '← 동작 목록';
 
   const meta = document.createElement('p');
   meta.className = 'detail-meta';
@@ -128,74 +169,54 @@ function createHeader(movement) {
   summary.className = 'detail-summary';
   summary.textContent = movement.summary;
 
-  header.append(meta, title, nameEn, summary);
-  return header;
-}
-
-// 주요 사용 근육. 인체 도식을 먼저 보여주고 정확한 이름을 아래에 둡니다.
-// 도식에 대응이 없는 이름(예: 척추 분절)도 목록에는 그대로 남습니다.
-function createTargets(movement) {
-  const section = document.createElement('section');
-  section.className = 'block targets';
-
-  const heading = document.createElement('h2');
-  heading.textContent = '주요 사용 근육';
-  section.appendChild(heading);
-
-  const map = createBodyMap(movement);
-  if (map) section.appendChild(map);
-
-  const list = document.createElement('ul');
-  (movement.targets || []).forEach(function (name) {
-    const li = document.createElement('li');
-    li.textContent = name;
-    list.appendChild(li);
-  });
-  section.appendChild(list);
-
+  section.append(back, meta, title, nameEn, summary);
   return section;
 }
 
-function createBreathing(movement) {
+function renderNotFound(container) {
+  document.title = '동작을 찾을 수 없습니다 - 필라테스 동작 사전';
+
   const section = document.createElement('section');
-  section.className = 'block breathing';
+  section.className = 'detail-hero shell';
 
-  const heading = document.createElement('h2');
-  heading.textContent = '호흡';
+  const back = document.createElement('a');
+  back.className = 'back-link';
+  back.href = 'index.html';
+  back.textContent = '← 동작 목록';
 
-  const text = document.createElement('p');
-  text.textContent = movement.breathing;
+  const heading = document.createElement('h1');
+  heading.textContent = '동작을 찾을 수 없습니다';
 
-  section.append(heading, text);
-  return section;
+  const message = document.createElement('p');
+  message.className = 'detail-summary';
+  message.textContent = '주소가 잘못되었거나 삭제된 동작입니다. 목록에서 다시 선택해 주세요.';
+
+  section.append(back, heading, message);
+  container.appendChild(section);
 }
 
 function renderDetail() {
   const container = document.getElementById('movement-detail');
   const movement = findMovement();
 
-  if (!movement) {
-    renderNotFound(container);
-    return;
-  }
+  if (!movement) return renderNotFound(container);
 
   document.title = movement.name + ' - 필라테스 동작 사전';
 
-  const blocks = [
-    createHeader(movement),
-    createGallery(movement),
-    createVideo(movement),
-    createTargets(movement),
+  const media = [createGallery(movement), createVideo(movement)].filter(Boolean);
+
+  container.appendChild(createHero(movement));
+  if (media.length) container.appendChild(createBand(media));
+
+  container.appendChild(createBand([createTargets(movement)], { dark: true }));
+  container.appendChild(createBand([
     createBreathing(movement),
-    createBlock('진행 순서', movement.steps, 'steps'),
+    createBlock('진행 순서', movement.steps, 'steps')
+  ], { narrow: true }));
+  container.appendChild(createBand([
     createBlock('주의할 점', movement.cautions, 'cautions'),
     createBlock('도움이 되는 팁', movement.tips, 'tips')
-  ];
-
-  // 사진이나 영상이 없는 동작은 해당 블록이 null 이므로 걸러냅니다.
-  blocks.filter(Boolean).forEach(function (block) {
-    container.appendChild(block);
-  });
+  ], { narrow: true }));
 }
 
 renderDetail();

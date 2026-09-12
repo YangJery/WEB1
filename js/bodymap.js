@@ -159,8 +159,18 @@ function svgEl(name, attrs) {
   return el;
 }
 
+// 앞·뒤 한 쌍만 만듭니다. 첫 화면과 목록 카드에서도 씁니다.
+function createBodyPair(active, options) {
+  const opts = options || {};
+  const pair = document.createElement('div');
+  pair.className = 'body-map';
+  pair.append(createBodyView('front', active, opts), createBodyView('back', active, opts));
+  return pair;
+}
+
 // 앞모습 또는 뒷모습 하나를 그립니다.
-function createBodyView(view, active) {
+function createBodyView(view, active, options) {
+  const opts = options || {};
   const figure = document.createElement('figure');
   figure.className = 'body-view';
 
@@ -186,10 +196,13 @@ function createBodyView(view, active) {
     });
   });
 
-  const caption = document.createElement('figcaption');
-  caption.textContent = view === 'front' ? '앞' : '뒤';
+  figure.appendChild(svg);
 
-  figure.append(svg, caption);
+  if (!opts.hideCaption) {
+    const caption = document.createElement('figcaption');
+    caption.textContent = view === 'front' ? '앞' : '뒤';
+    figure.appendChild(caption);
+  }
   return figure;
 }
 
@@ -199,9 +212,7 @@ function createBodyMap(movement) {
   const active = regionsForTargets(movement.targets);
   if (active.size === 0) return null;
 
-  const wrap = document.createElement('div');
-  wrap.className = 'body-map';
-  wrap.append(createBodyView('front', active), createBodyView('back', active));
+  const wrap = createBodyPair(active);
 
   const legend = document.createElement('ul');
   legend.className = 'body-legend';
