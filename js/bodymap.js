@@ -173,5 +173,16 @@ function createBodyMap(movement) {
   const container = document.createElement('div');
   container.className = 'body-map-wrap';
   container.append(wrap, legend);
-  return container;
+
+  // 이 그림이 무엇인지 밝힙니다.
+  // 부위를 알아보기 쉽게 단순화한 것이라, 해부도처럼 읽히면 안 됩니다.
+  const note = document.createElement('p');
+  note.className = 'body-note';
+  note.textContent = '몸의 어느 부위가 일하는지 보여주는 간략한 도식입니다. ' +
+                     '정확한 해부 구조는 전문 자료를 참고하세요.';
+
+  const section = document.createElement('div');
+  section.className = 'body-map-section';
+  section.append(container, note);
+  return section;
 }

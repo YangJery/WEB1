@@ -280,8 +280,8 @@ body {
     max-width: 66ch;
 }
 
-.targets .body-map-wrap + ul {
-    margin-top: 14px;
+.targets .body-map-section + ul {
+    margin-top: 16px;
 }
 
 .targets > ul {
@@ -376,6 +376,14 @@ body {
     height: 10px;
     border-radius: 3px;
     background: var(--accent);
+}
+
+.body-note {
+    margin: 8px 0 0;
+    max-width: 560px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
 }
 
 /* 상세 페이지 사진 */
