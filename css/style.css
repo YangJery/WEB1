@@ -19,6 +19,13 @@
     --figure-dark: #4a483c;
 
     --media-bg: #14130f;
+    --on-dark: #ffffff;
+    /* 알파가 필요한 자리. 반투명이라 뒷배경이 섞이므로 값을 바꾸면
+       상단바 링크 대비를 다시 재야 합니다 (0.85 에서 4.65:1). */
+    --topbar-bg: rgba(251, 250, 247, 0.85);
+    --overlay-bg: rgba(18, 18, 14, 0.74);
+    --shadow-card: rgba(22, 21, 15, 0.24);
+    --line-on-dark: rgba(242, 240, 233, 0.26);
     --thumb-from: #f1efe8;
     --thumb-to: #e6e9e2;
 
@@ -32,6 +39,17 @@
 
     --shell: 1240px;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* css/admin.css 가 쓰는 이름. 관리 화면은 이번 개편 범위 밖이라
+       그 파일을 건드리지 않고 새 값으로 이어 둡니다.
+       단축 속성 안의 var() 가 무효면 border-style 이 none 으로 떨어져
+       입력칸 테두리가 통째로 사라집니다 — 비워두면 안 됩니다. */
+    --bg: var(--paper);
+    --text: var(--ink);
+    --muted: var(--ink-soft);
+    --border: var(--line);
+    --accent-soft: #eef2ec;
+    --radius: 14px;
 }
 
 * { box-sizing: border-box; }
@@ -132,7 +150,7 @@ main:focus { outline: none; }
     /* 어두운 구역이 이 막대 뒤로 지나갈 때도 글자가 읽혀야 합니다.
        0.72 면 뒷배경이 #bab9b6 이 되어 nav 링크(--ink-soft)가 3.41:1 로 떨어집니다.
        0.85 에서 4.65:1. 흐림 효과는 그대로 남습니다. */
-    background: rgba(251, 250, 247, 0.85);
+    background: var(--topbar-bg);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid transparent;
@@ -177,6 +195,36 @@ main:focus { outline: none; }
 }
 
 .topbar nav a:hover { color: var(--ink); }
+
+/* 관리 화면의 레이아웃 클래스. 공개 페이지는 .shell / .topbar / .brand 를
+   쓰지만 admin.html 은 옛 이름을 그대로 씁니다. */
+.wrap {
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+.site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 24px 0;
+}
+
+.logo {
+    display: inline-block;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+}
+
+.tagline {
+    margin: 5px 0 0;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+}
 
 /* ── 첫 화면 ────────────────────────────────────────────── */
 
@@ -415,7 +463,7 @@ main:focus { outline: none; }
 .card:hover {
     transform: translateY(-6px);
     border-color: transparent;
-    box-shadow: 0 18px 40px -16px rgba(22, 21, 15, 0.24);
+    box-shadow: 0 18px 40px -16px var(--shadow-card);
 }
 
 .thumb {
@@ -459,8 +507,8 @@ main:focus { outline: none; }
 .media-badge {
     padding: 4px 11px;
     border-radius: 999px;
-    background: rgba(18, 18, 14, 0.74);
-    color: #fff;
+    background: var(--overlay-bg);
+    color: var(--on-dark);
     font-size: 11.5px;
     font-weight: 500;
     white-space: nowrap;
@@ -529,7 +577,10 @@ main:focus { outline: none; }
 .back-link:hover { color: var(--ink); }
 
 .detail-hero {
-    padding: clamp(26px, 4vw, 44px) 0 clamp(40px, 6vw, 72px);
+    /* 이 요소는 .shell 을 함께 쓰므로 padding 을 한 줄로 쓰면
+       좌우 여백이 0 이 됩니다 (디자인 규칙 7번). */
+    padding-top: clamp(26px, 4vw, 44px);
+    padding-bottom: clamp(40px, 6vw, 72px);
 }
 
 .detail-meta {
@@ -646,7 +697,7 @@ main:focus { outline: none; }
     font-size: 14px;
 }
 
-.band-dark .targets > ul > li { border-color: rgba(242, 240, 233, 0.26); }
+.band-dark .targets > ul > li { border-color: var(--line-on-dark); }
 
 /* ── 인체 도식 ──────────────────────────────────────────── */
 
@@ -821,7 +872,7 @@ main:focus { outline: none; }
 
 @media (max-width: 600px) {
     body { font-size: 16px; }
-    .shell { padding: 0 20px; }
+    .shell, .wrap { padding: 0 20px; }
     .grid { grid-template-columns: 1fr; gap: 16px; }
     .hero-figure svg { width: 128px; }
     .steps li { padding-left: 44px; }

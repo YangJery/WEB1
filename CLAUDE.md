@@ -189,6 +189,10 @@ node -e "$(cat js/data.js); console.log(MOVEMENTS.length, CATEGORIES)"
    | `--figure` | `#cfcaba` | 인체 실루엣 (밝은 구역) |
    | `--figure-dark` | `#4a483c` | 인체 실루엣 (어두운 구역) |
    | `--media-bg` | `#14130f` | 영상 자리 바탕 |
+   | `--on-dark` | `#ffffff` | 어두운 표면 위의 글자 |
+   | `--topbar-bg` | `rgba(251,250,247,.85)` | 상단바. 알파를 내리면 링크 대비가 깨짐 |
+   | `--overlay-bg` | `rgba(18,18,14,.74)` | 카드 위 배지 |
+   | `--bg` `--text` `--muted` `--border` `--radius` `--accent-soft` | 위 값들의 별칭 | `css/admin.css` 전용. 비우면 관리 화면 테두리가 사라짐 |
    | `--thumb-from` / `--thumb-to` | `#f1efe8` / `#e6e9e2` | 카드 그림 바탕 기울기 |
    | `--level-*-bg` / `--level-*-fg` | 아래 3번 | 난이도 배지 6개 |
    | `--shell` | `1240px` | 본문 최대 폭 |
@@ -199,9 +203,12 @@ node -e "$(cat js/data.js); console.log(MOVEMENTS.length, CATEGORIES)"
    진하게 하면 켜진 근육이 묻힙니다. 지금 값은 배경 대비 1.57 / 2.04, 켜진 근육
    대비 3.63 / 4.04 입니다. 바꾸려면 양쪽을 함께 재계산하세요.
 
-2. **밝은 구역과 어두운 구역을 번갈아 씁니다.** 어두운 구역은 `.band-dark` 입니다.
-   어두운 바탕에서는 강조색이 `--accent-bright` 로, 도식 바탕이 `#3a3930` 으로
-   바뀝니다. 어두운 구역에 밝은 구역용 색을 쓰면 읽히지 않습니다.
+2. **어두운 구역(`.band-dark`)은 강조하고 싶은 한 곳에만 씁니다.** 지금은 상세
+   페이지의 "주요 사용 근육" 한 구역뿐이고, 홈에는 없습니다. 여러 곳에 흩뿌리면
+   강조가 사라집니다.
+   어두운 바탕에서는 강조색이 `--accent-bright`, 보조 텍스트가 `--ink-dim`,
+   실루엣이 `--figure-dark` 로 바뀝니다. 밝은 구역용 색을 그대로 쓰면 읽히지
+   않습니다. `.band-dark` 안에서 색을 새로 쓸 때마다 대비를 재세요.
 3. **난이도 배지 색(초급·중급·고급)은 의미를 가진 색입니다.** 임의로 바꾸지 않습니다.
    `--level-beginner-bg/fg` `#e4ede0`/`#3d5c36`,
    `--level-intermediate-bg/fg` `#f6ebd8`/`#7d541c`,
