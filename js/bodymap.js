@@ -37,6 +37,11 @@ const BODY_REGIONS = {
   shoulders:  { view: 'both',  label: '어깨',
                 paths: ['M 51,73 Q 61,67 69,73 L 67,98 Q 56,95 50,88 Z',
                         'M 129,73 Q 119,67 111,73 L 113,98 Q 124,95 130,88 Z'] },
+  arms:       { view: 'both',  label: '위팔',
+                paths: ['M 39,94 L 49,97 L 46,142 L 36,139 Z',
+                        'M 141,94 L 131,97 L 134,142 L 144,139 Z'] },
+  neck:       { view: 'both',  label: '목',
+                paths: ['M 83,53 L 97,53 L 97,65 L 83,65 Z'] },
   calves:     { view: 'back',  label: '종아리',
                 paths: ['M 69,312 L 85,312 L 83,378 L 70,378 Z',
                         'M 111,312 L 95,312 L 97,378 L 110,378 Z'] },
@@ -63,43 +68,80 @@ const BODY_REGIONS = {
 const MUSCLE_REGIONS = {
   // 배
   '복직근': ['abs'],
-  '복근': ['abs'],
-  '복횡근': ['abs'],
   '복부': ['abs'],
+  '복근': ['abs', 'obliques'],          // 복직근·복사근·복횡근을 아우르는 말
+  '복횡근': ['abs'],
+  '골반기저근': ['abs'],
   '복사근': ['obliques'],
+  '외복사근': ['obliques'],
+  '내복사근': ['obliques'],
+  '옆구리': ['obliques'],
+  '전거근': ['obliques'],               // 갈비뼈 옆면. 등 가운데가 아닙니다
   '코어 안정근': ['abs', 'obliques', 'erectors'],
+
+  // 등·척추
   '척추기립근': ['erectors'],
+  '척추세움근': ['erectors'],
+  '척추 세움근': ['erectors'],
+  '기립근': ['erectors'],
+  '다열근': ['erectors'],
+  '척추 신전근': ['erectors'],
   '척추 회전근': ['erectors', 'obliques'],
+  '요방형근': ['erectors', 'obliques'],
   '광배근': ['lats'],
+  '넓은등근': ['lats'],
+  '승모근': ['upperBack'],
+  '능형근': ['upperBack'],
+  '견갑 안정근': ['upperBack'],
+  '견갑골 안정근': ['upperBack'],
+  '등 위쪽': ['upperBack'],
+  '흉추 신전근': ['erectors', 'upperBack'],
+
+  // 엉덩이·고관절
   '둔근': ['glutes'],
+  '대둔근': ['glutes'],
+  '엉덩이': ['glutes'],
+  '이상근': ['glutes'],
+  '고관절 외회전근': ['glutes'],
+  '고관절 신전근': ['glutes', 'hamstrings'],
   '중둔근': ['abductors'],
   '고관절 외전근': ['abductors'],
+  '엉덩이 바깥': ['abductors'],
+  '대퇴근막장근': ['abductors', 'hipFlexors'],
   '고관절 굴곡근': ['hipFlexors'],
-  '내전근': ['adductors'],
+  '장요근': ['hipFlexors'],
+  '고관절 앞': ['hipFlexors'],
+
+  // 다리
   '햄스트링': ['hamstrings'],
   '슬굴곡근': ['hamstrings'],
-
-  // 아래에 더한 이름들
+  '허벅지 뒤': ['hamstrings'],
+  '내전근': ['adductors'],
+  '고관절 내전근': ['adductors'],
+  '허벅지 안쪽': ['adductors'],
   '대퇴사두근': ['quads'],
   '허벅지 앞': ['quads'],
   '종아리': ['calves'],
   '비복근': ['calves'],
+  '장딴지근': ['calves'],
   '가자미근': ['calves'],
+
+  // 상체
+  '대흉근': ['chest'],
+  '가슴': ['chest'],
   '삼각근': ['shoulders'],
   '어깨': ['shoulders'],
   '회전근개': ['shoulders'],
-  '승모근': ['upperBack'],
-  '능형근': ['upperBack'],
-  '전거근': ['upperBack', 'obliques'],
-  '대흉근': ['chest'],
-  '가슴': ['chest'],
-  '장요근': ['hipFlexors'],
-  '대둔근': ['glutes'],
-  '척추세움근': ['erectors'],
-  '기립근': ['erectors'],
-  '다열근': ['erectors'],
-  '골반기저근': ['abs'],
-  '횡격막': ['abs']
+  '삼두근': ['arms'],
+  '상완삼두근': ['arms'],
+  '이두근': ['arms'],
+  '상완이두근': ['arms'],
+  '위팔': ['arms'],
+
+  // 목
+  '심부 경부 굴곡근': ['neck'],
+  '목 굴곡근': ['neck'],
+  '목': ['neck']
 };
 
 // 근육 이름 목록에서 칠할 부위를 모읍니다.
@@ -173,5 +215,16 @@ function createBodyMap(movement) {
   const container = document.createElement('div');
   container.className = 'body-map-wrap';
   container.append(wrap, legend);
-  return container;
+
+  // 이 그림이 무엇인지 밝힙니다.
+  // 부위를 알아보기 쉽게 단순화한 것이라, 해부도처럼 읽히면 안 됩니다.
+  const note = document.createElement('p');
+  note.className = 'body-note';
+  note.textContent = '몸의 어느 부위가 일하는지 보여주는 간략한 도식입니다. ' +
+                     '정확한 해부 구조는 전문 자료를 참고하세요.';
+
+  const section = document.createElement('div');
+  section.className = 'body-map-section';
+  section.append(container, note);
+  return section;
 }
