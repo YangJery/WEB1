@@ -28,6 +28,20 @@ const BODY_REGIONS = {
                 paths: ['M 77,214 L 88,214 L 87,290 L 77,288 Z',
                         'M 103,214 L 92,214 L 93,290 L 103,288 Z'] },
 
+  chest:      { view: 'front', label: '가슴',
+                paths: ['M 63,78 Q 76,74 87,78 L 87,104 Q 72,102 65,96 Z',
+                        'M 117,78 Q 104,74 93,78 L 93,104 Q 108,102 115,96 Z'] },
+  quads:      { view: 'front', label: '허벅지 앞',
+                paths: ['M 66,212 L 87,212 L 86,292 L 68,292 Z',
+                        'M 114,212 L 93,212 L 94,292 L 112,292 Z'] },
+  shoulders:  { view: 'both',  label: '어깨',
+                paths: ['M 51,73 Q 61,67 69,73 L 67,98 Q 56,95 50,88 Z',
+                        'M 129,73 Q 119,67 111,73 L 113,98 Q 124,95 130,88 Z'] },
+  calves:     { view: 'back',  label: '종아리',
+                paths: ['M 69,312 L 85,312 L 83,378 L 70,378 Z',
+                        'M 111,312 L 95,312 L 97,378 L 110,378 Z'] },
+  upperBack:  { view: 'back',  label: '등 위쪽',
+                paths: ['M 74,74 Q 90,70 106,74 L 104,116 Q 90,112 76,116 Z'] },
   erectors:   { view: 'back',  label: '척추 세움근',
                 paths: ['M 81,84 L 99,84 L 101,188 L 79,188 Z'] },
   lats:       { view: 'back',  label: '넓은등근',
@@ -47,7 +61,9 @@ const BODY_REGIONS = {
 // 데이터에 쓰는 근육 이름 → 그림의 부위.
 // 여기에 없는 이름은 그림에 칠하지 않습니다.
 const MUSCLE_REGIONS = {
+  // 배
   '복직근': ['abs'],
+  '복근': ['abs'],
   '복횡근': ['abs'],
   '복부': ['abs'],
   '복사근': ['obliques'],
@@ -60,7 +76,30 @@ const MUSCLE_REGIONS = {
   '고관절 외전근': ['abductors'],
   '고관절 굴곡근': ['hipFlexors'],
   '내전근': ['adductors'],
-  '햄스트링': ['hamstrings']
+  '햄스트링': ['hamstrings'],
+  '슬굴곡근': ['hamstrings'],
+
+  // 아래에 더한 이름들
+  '대퇴사두근': ['quads'],
+  '허벅지 앞': ['quads'],
+  '종아리': ['calves'],
+  '비복근': ['calves'],
+  '가자미근': ['calves'],
+  '삼각근': ['shoulders'],
+  '어깨': ['shoulders'],
+  '회전근개': ['shoulders'],
+  '승모근': ['upperBack'],
+  '능형근': ['upperBack'],
+  '전거근': ['upperBack', 'obliques'],
+  '대흉근': ['chest'],
+  '가슴': ['chest'],
+  '장요근': ['hipFlexors'],
+  '대둔근': ['glutes'],
+  '척추세움근': ['erectors'],
+  '기립근': ['erectors'],
+  '다열근': ['erectors'],
+  '골반기저근': ['abs'],
+  '횡격막': ['abs']
 };
 
 // 근육 이름 목록에서 칠할 부위를 모읍니다.
@@ -95,7 +134,7 @@ function createBodyView(view, active) {
 
   Object.keys(BODY_REGIONS).forEach(function (key) {
     const region = BODY_REGIONS[key];
-    if (region.view !== view) return;
+    if (region.view !== view && region.view !== 'both') return;
 
     region.paths.forEach(function (d) {
       svg.appendChild(svgEl('path', {
