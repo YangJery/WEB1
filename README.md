@@ -19,6 +19,7 @@ css/admin.css    관리 화면 스타일
 images/          동작 사진
 js/data.js       동작 데이터  ← 내용을 추가할 때 여기만 고치면 됩니다
 js/common.js     목록·상세가 함께 쓰는 함수
+js/bodymap.js    주요 사용 근육 인체 도식
 js/list.js       목록 화면 그리기
 js/detail.js     상세 화면 그리기
 js/admin.js      관리 화면 동작

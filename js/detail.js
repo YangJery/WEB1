@@ -132,6 +132,30 @@ function createHeader(movement) {
   return header;
 }
 
+// 주요 사용 근육. 인체 도식을 먼저 보여주고 정확한 이름을 아래에 둡니다.
+// 도식에 대응이 없는 이름(예: 척추 분절)도 목록에는 그대로 남습니다.
+function createTargets(movement) {
+  const section = document.createElement('section');
+  section.className = 'block targets';
+
+  const heading = document.createElement('h2');
+  heading.textContent = '주요 사용 근육';
+  section.appendChild(heading);
+
+  const map = createBodyMap(movement);
+  if (map) section.appendChild(map);
+
+  const list = document.createElement('ul');
+  (movement.targets || []).forEach(function (name) {
+    const li = document.createElement('li');
+    li.textContent = name;
+    list.appendChild(li);
+  });
+  section.appendChild(list);
+
+  return section;
+}
+
 function createBreathing(movement) {
   const section = document.createElement('section');
   section.className = 'block breathing';
@@ -161,7 +185,7 @@ function renderDetail() {
     createHeader(movement),
     createGallery(movement),
     createVideo(movement),
-    createBlock('주요 사용 근육', movement.targets, 'targets'),
+    createTargets(movement),
     createBreathing(movement),
     createBlock('진행 순서', movement.steps, 'steps'),
     createBlock('주의할 점', movement.cautions, 'cautions'),
