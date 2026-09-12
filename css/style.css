@@ -280,7 +280,11 @@ body {
     max-width: 66ch;
 }
 
-.targets ul {
+.targets .body-map-wrap + ul {
+    margin-top: 14px;
+}
+
+.targets > ul {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -288,7 +292,7 @@ body {
     list-style: none;
 }
 
-.targets li {
+.targets > ul > li {
     margin: 0;
     padding: 4px 12px;
     background: var(--surface);
@@ -299,6 +303,79 @@ body {
 
 .cautions li::marker {
     color: #b06a6a;
+}
+
+/* 인체 도식 */
+.body-map-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    max-width: 560px;
+}
+
+.body-map {
+    display: flex;
+    gap: 8px;
+}
+
+.body-view {
+    margin: 0;
+    text-align: center;
+}
+
+.body-view svg {
+    display: block;
+    width: 96px;
+    height: auto;
+}
+
+.body-view figcaption {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.body-base {
+    fill: #e8e4dd;
+}
+
+.body-region {
+    fill: #d8d3ca;
+}
+
+.body-region.is-active {
+    fill: var(--accent);
+}
+
+.body-legend {
+    flex: 1;
+    min-width: 140px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.body-legend li {
+    position: relative;
+    margin-bottom: 6px;
+    padding-left: 18px;
+    font-size: 14px;
+}
+
+.body-legend li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    background: var(--accent);
 }
 
 /* 상세 페이지 사진 */
