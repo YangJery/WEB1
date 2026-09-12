@@ -7,6 +7,15 @@ function levelKey(level) {
   return 'advanced';
 }
 
+// 눈에는 보이지 않고 낭독기에만 읽히는 이름표.
+// "초급" 만 읽히면 무엇의 초급인지 알 수 없어 앞에 붙여 씁니다.
+function srLabel(text) {
+  const span = document.createElement('span');
+  span.className = 'sr-only';
+  span.textContent = text;
+  return span;
+}
+
 // 유튜브 주소에서 영상 ID만 뽑아냅니다.
 // 아래 형태를 모두 받아들이므로 주소창의 주소를 그대로 붙여넣어도 됩니다.
 //   https://youtu.be/ID
