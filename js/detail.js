@@ -5,6 +5,21 @@ function findMovement() {
   return MOVEMENTS.find(function (m) { return m.id === id; });
 }
 
+// 목록으로 돌아가는 링크.
+// 화살표는 낭독기가 "왼쪽 화살표" 라고 읽으므로 글에서 빼 둡니다.
+function createBackLink() {
+  const back = document.createElement('a');
+  back.className = 'back-link';
+  back.href = 'index.html';
+
+  const arrow = document.createElement('span');
+  arrow.setAttribute('aria-hidden', 'true');
+  arrow.textContent = '←';
+
+  back.append(arrow, document.createTextNode('동작 목록'));
+  return back;
+}
+
 // 한 구역을 만듭니다. dark 를 주면 어두운 배경이 됩니다.
 function createBand(children, options) {
   const opts = options || {};
@@ -28,6 +43,10 @@ function createBlock(title, items, className) {
   heading.textContent = title;
 
   const list = document.createElement(className === 'steps' ? 'ol' : 'ul');
+  // 진행 순서는 CSS 로 번호 동그라미를 그리려고 list-style: none 을 씁니다.
+  // 그러면 사파리가 목록 의미를 버리므로 role 로 다시 밝혀 둡니다.
+  if (className === 'steps') list.setAttribute('role', 'list');
+
   items.forEach(function (text) {
     const li = document.createElement('li');
     li.textContent = text;
@@ -51,6 +70,7 @@ function createTargets(movement) {
   if (map) section.appendChild(map);
 
   const list = document.createElement('ul');
+  list.setAttribute('role', 'list');   // 위와 같은 이유 (list-style: none)
   (movement.targets || []).forEach(function (name) {
     const li = document.createElement('li');
     li.textContent = name;
@@ -140,21 +160,18 @@ function createHero(movement) {
   const section = document.createElement('section');
   section.className = 'detail-hero shell';
 
-  const back = document.createElement('a');
-  back.className = 'back-link';
-  back.href = 'index.html';
-  back.textContent = '← 동작 목록';
+  const back = createBackLink();
 
   const meta = document.createElement('p');
   meta.className = 'detail-meta';
 
   const category = document.createElement('span');
   category.className = 'chip';
-  category.textContent = movement.category;
+  category.append(srLabel('분류 '), document.createTextNode(movement.category));
 
   const level = document.createElement('span');
   level.className = 'badge badge-' + levelKey(movement.level);
-  level.textContent = movement.level;
+  level.append(srLabel('난이도 '), document.createTextNode(movement.level));
 
   meta.append(category, level);
 
@@ -163,6 +180,7 @@ function createHero(movement) {
 
   const nameEn = document.createElement('p');
   nameEn.className = 'detail-en';
+  nameEn.lang = 'en';                  // 영문 이름을 한국어 음성으로 읽지 않게
   nameEn.textContent = movement.nameEn;
 
   const summary = document.createElement('p');
@@ -179,10 +197,7 @@ function renderNotFound(container) {
   const section = document.createElement('section');
   section.className = 'detail-hero shell';
 
-  const back = document.createElement('a');
-  back.className = 'back-link';
-  back.href = 'index.html';
-  back.textContent = '← 동작 목록';
+  const back = createBackLink();
 
   const heading = document.createElement('h1');
   heading.textContent = '동작을 찾을 수 없습니다';

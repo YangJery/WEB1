@@ -168,17 +168,32 @@ function createBodyPair(active, options) {
   return pair;
 }
 
+// 이 모습(앞/뒤)에서 칠해진 부위의 이름을 모아 문장으로 만듭니다.
+// 도식은 그림이므로, 낭독기에는 이 문장이 그림 대신 읽힙니다.
+function describeBodyView(view, active) {
+  const names = Object.keys(BODY_REGIONS).filter(function (key) {
+    const region = BODY_REGIONS[key];
+    return active.has(key) && (region.view === view || region.view === 'both');
+  }).map(function (key) { return BODY_REGIONS[key].label; });
+
+  const side = view === 'front' ? '앞모습' : '뒷모습';
+  if (names.length === 0) return side + ' 도식. 표시된 부위 없음';
+  return side + ' 도식. 표시된 부위: ' + names.join(', ');
+}
+
 // 앞모습 또는 뒷모습 하나를 그립니다.
 function createBodyView(view, active, options) {
   const opts = options || {};
   const figure = document.createElement('figure');
   figure.className = 'body-view';
 
-  const svg = svgEl('svg', {
-    viewBox: '0 0 180 420',
-    role: 'img',
-    'aria-label': (view === 'front' ? '앞모습' : '뒷모습') + ' 인체 도식'
-  });
+  // 첫 화면과 목록 카드의 도식은 옆에 있는 글이 같은 내용을 말해 주는
+  // 장식입니다. 낭독기에서는 통째로 숨겨 링크 이름이 지저분해지지 않게 합니다.
+  if (opts.hideCaption) figure.setAttribute('aria-hidden', 'true');
+
+  const svg = svgEl('svg', opts.hideCaption
+    ? { viewBox: '0 0 180 420', focusable: 'false' }
+    : { viewBox: '0 0 180 420', role: 'img', 'aria-label': describeBodyView(view, active) });
 
   BODY_OUTLINE.forEach(function (d) {
     svg.appendChild(svgEl('path', { d: d, class: 'body-base' }));
@@ -216,6 +231,8 @@ function createBodyMap(movement) {
 
   const legend = document.createElement('ul');
   legend.className = 'body-legend';
+  // list-style: none 을 준 목록은 사파리에서 목록으로 읽히지 않습니다.
+  legend.setAttribute('role', 'list');
   Object.keys(BODY_REGIONS).forEach(function (key) {
     if (!active.has(key)) return;
     const li = document.createElement('li');

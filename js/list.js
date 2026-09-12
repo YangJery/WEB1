@@ -9,7 +9,9 @@ function createThumb(movement) {
   if (photo) {
     const img = document.createElement('img');
     img.src = photo.src;
-    img.alt = movement.name + ' 자세';
+    // 카드 전체가 링크이고 바로 옆에 동작 이름이 글로 있습니다.
+    // alt 를 채우면 링크 이름에 같은 말이 두 번 읽히므로 비워 둡니다.
+    img.alt = '';
     img.loading = 'lazy';
     thumb.appendChild(img);
   } else {
@@ -25,7 +27,10 @@ function createThumb(movement) {
   if (youtubeId(movement.youtube)) {
     const badge = document.createElement('span');
     badge.className = 'media-badge';
-    badge.textContent = '▶ 영상';
+    const mark = document.createElement('span');
+    mark.setAttribute('aria-hidden', 'true');   // "검은 오른쪽 삼각형" 으로 읽힙니다
+    mark.textContent = '▶';
+    badge.append(mark, document.createTextNode(' 영상'));
     badges.appendChild(badge);
   }
   if (badges.children.length > 0) thumb.appendChild(badges);
@@ -43,13 +48,14 @@ function createCard(movement) {
 
   const level = document.createElement('span');
   level.className = 'badge badge-' + levelKey(movement.level);
-  level.textContent = movement.level;
+  level.append(srLabel('난이도 '), document.createTextNode(movement.level));
 
   const name = document.createElement('h4');
   name.textContent = movement.name;
 
   const nameEn = document.createElement('p');
   nameEn.className = 'card-en';
+  nameEn.lang = 'en';                  // 영문 이름을 한국어 음성으로 읽지 않게
   nameEn.textContent = movement.nameEn;
 
   const summary = document.createElement('p');
