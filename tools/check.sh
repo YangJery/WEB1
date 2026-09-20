@@ -96,6 +96,12 @@ p=0
 for cls in $( { grep -ho 'class="[^"]*shell[^"]*"' *.html | sed 's/class="//;s/"//';
                 grep -ho "className = '[^']*shell[^']*'" js/*.js | sed "s/className = '//;s/'//";
               } | tr ' ' '\n' | grep -v '^shell$\|^$' | sort -u); do
+  # 클래스 이름을 sed 주소식에 그대로 넣습니다. 정규식 문자가 섞이면 엉뚱한 곳을
+  # 보거나(`.`, `*`) sed 의 `e` 명령으로 셸 명령이 돌 수도 있으므로, 평범한
+  # 클래스 이름만 통과시키고 나머지는 이름을 보여주며 실패로 처리합니다.
+  case $cls in
+    *[!A-Za-z0-9_-]*) bad "클래스 이름에 쓸 수 없는 글자: $cls"; p=1; continue ;;
+  esac
   sed -n "/^\.$cls {/,/^}/p" css/style.css | grep -q '^[[:space:]]*padding:' && { bad ".$cls 가 padding 단축 → .shell 좌우 여백 소멸"; p=1; }
 done
 [ $p -eq 0 ] && ok ".shell 과 겹치는 클래스 모두 안전"
